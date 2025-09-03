@@ -115,9 +115,8 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 // @route   GET /api/auth/logout
 // @access  Public
 const logoutUser = (req: Request, res: Response) => {
-  res.cookie("token", "", {
+  res.clearCookie("token", {
     httpOnly: true,
-    expires: new Date(Date.now() + 10 * 1000), // Expires in 10 seconds
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
   });

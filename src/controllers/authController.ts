@@ -115,16 +115,19 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 // @route   GET /api/auth/logout
 // @access  Public
 const logoutUser = (req: Request, res: Response) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
-
-  res.status(200).json({
-    success: true,
-    message: "Logged out successfully",
-  });
+  const isProduction = process.env.NODE_ENV === "production";
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      path: "/",
+    })
+    .status(200)
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
 };
 
 // @desc    Register a new admin user (Highly Restricted: for initial setup or by existing admins)

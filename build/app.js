@@ -10,6 +10,7 @@ const errorMiddleware_1 = require("./middlewares/errorMiddleware");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const eventRoutes_1 = __importDefault(require("./routes/eventRoutes"));
 const postRoutes_1 = __importDefault(require("./routes/postRoutes"));
+const recommendationRoutes_1 = __importDefault(require("./routes/recommendationRoutes"));
 const registrationRoutes_1 = __importDefault(require("./routes/registrationRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const app = (0, express_1.default)();
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/events", eventRoutes_1.default);
 app.use("/api/posts", postRoutes_1.default);
+app.use("/api/recommendations", recommendationRoutes_1.default);
 app.use("/api/registrations", registrationRoutes_1.default);
 app.use("/api/users", userRoutes_1.default);
 // IMPORTANT: This error middleware MUST be the LAST middleware used

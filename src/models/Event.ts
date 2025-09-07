@@ -90,6 +90,8 @@ const EventSchema: Schema = new Schema(
   }
 );
 
+EventSchema.index({ title: "text", description: "text", category: "text" });
+
 const Event = mongoose.model<IEvent>("Event", EventSchema);
 
 export default Event;

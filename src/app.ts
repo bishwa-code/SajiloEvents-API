@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware";
 import authRoutes from "./routes/authRoutes";
 import eventRoutes from "./routes/eventRoutes";
 import postRoutes from "./routes/postRoutes";
+import recommendationRoutes from "./routes/recommendationRoutes";
 import registrationRoutes from "./routes/registrationRoutes";
 import userRoutes from "./routes/userRoutes";
 
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/registrations", registrationRoutes);
 app.use("/api/users", userRoutes);
 

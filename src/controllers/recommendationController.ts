@@ -52,7 +52,8 @@ export const getRecommendedEvents = async (
       { score: { $meta: "textScore" } }
     )
       .sort({ score: { $meta: "textScore" }, eventDate: 1 })
-      .limit(10);
+      .limit(10)
+      .populate("organizer", "fullName email");
 
     if (recommendedEvents.length === 0) {
       return res.status(200).json({

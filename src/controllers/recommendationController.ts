@@ -43,7 +43,6 @@ export const getRecommendedEvents = async (
 
     const interestsQuery = expandedInterests.join(" ");
 
-    // Search for relevant events
     const recommendedEvents = await Event.find(
       {
         $text: { $search: interestsQuery },

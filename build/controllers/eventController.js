@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEvent = exports.updateEvent = exports.getEventById = exports.getAllEvents = exports.createEvent = void 0;
+exports.deleteEvent = exports.updateEvent = exports.getEventById = exports.getMyEvents = exports.getAllEvents = exports.createEvent = void 0;
 const Event_1 = __importDefault(require("../models/Event"));
 const errorHandler_1 = __importDefault(require("../utils/errorHandler"));
 const cloudinary_1 = require("../config/cloudinary"); // Import cloudinary instance
@@ -115,6 +115,27 @@ const getAllEvents = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getAllEvents = getAllEvents;
+// @desc    Get events created by the logged-in admin
+// @route   GET /api/admin/events
+// @access  Private (Admin only)
+const getMyEvents = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user || req.user.role !== "admin") {
+        return next(new errorHandler_1.default("Only admins can access this resource.", 403));
+    }
+    try {
+        // Fetch events created by this admin
+        const events = yield Event_1.default.find({ organizer: req.user._id }).populate("organizer", "fullName email");
+        res.status(200).json({
+            success: true,
+            count: events.length,
+            events,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getMyEvents = getMyEvents;
 // @desc    Get single event by ID
 // @route   GET /api/events/:id
 // @access  Public

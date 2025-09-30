@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.updatePost = exports.getPostById = exports.getAllPosts = exports.createPost = void 0;
+exports.deletePost = exports.updatePost = exports.getPostById = exports.getMyPosts = exports.getAllPosts = exports.createPost = void 0;
 const Post_1 = __importDefault(require("../models/Post"));
 const errorHandler_1 = __importDefault(require("../utils/errorHandler"));
 const cloudinary_1 = require("../config/cloudinary"); // Import cloudinary instance
@@ -97,6 +97,28 @@ const getAllPosts = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getAllPosts = getAllPosts;
+// @desc    Get posts created by the logged-in admin
+// @route   GET /api/admin/posts
+// @access  Private (Admin only)
+const getMyPosts = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user || req.user.role !== "admin") {
+        return next(new errorHandler_1.default("Only admins can create posts.", 403));
+    }
+    try {
+        const posts = yield Post_1.default.find({ author: req.user._id })
+            .populate("author", "fullName email")
+            .populate("event", "title eventDate location");
+        res.status(200).json({
+            success: true,
+            count: posts.length,
+            posts,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getMyPosts = getMyPosts;
 // @desc    Get single post by ID
 // @route   GET /api/posts/:id
 // @access  Public

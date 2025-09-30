@@ -12,6 +12,7 @@ const router = express_1.default.Router();
 router.get("/", postController_1.getAllPosts); // Get all posts
 router.get("/:id", postController_1.getPostById); // Get single post by ID
 // Admin-only routes (protected and authorized)
+router.get("/posts", authMiddleware_1.protect, postController_1.getMyPosts); // Get posts created by the logged-in admin
 router.post("/", authMiddleware_1.protect, (0, authMiddleware_1.authorizeRoles)("admin"), (0, uploadMiddleware_1.uploadMultipleImages)("images"), postController_1.createPost); // Create post with multiple image upload
 router.put("/:id", authMiddleware_1.protect, (0, authMiddleware_1.authorizeRoles)("admin"), (0, uploadMiddleware_1.uploadMultipleImages)("images"), postController_1.updatePost); // Update post with optional multiple image upload
 router.delete("/:id", authMiddleware_1.protect, (0, authMiddleware_1.authorizeRoles)("admin"), postController_1.deletePost); // Delete post

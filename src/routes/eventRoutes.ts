@@ -2,6 +2,7 @@ import express from "express";
 import {
   createEvent,
   getAllEvents,
+  getMyEvents,
   getEventById,
   updateEvent,
   deleteEvent,
@@ -16,6 +17,7 @@ router.get("/", getAllEvents); // Get all events
 router.get("/:id", getEventById); // Get single event by ID
 
 // Admin-only routes (protected and authorized)
+router.get("/events", protect, getMyEvents); // Get events created by the logged-in admin
 router.post(
   "/",
   protect,

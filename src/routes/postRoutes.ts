@@ -2,6 +2,7 @@ import express from "express";
 import {
   createPost,
   getAllPosts,
+  getMyPosts,
   getPostById,
   updatePost,
   deletePost,
@@ -16,6 +17,8 @@ router.get("/", getAllPosts); // Get all posts
 router.get("/:id", getPostById); // Get single post by ID
 
 // Admin-only routes (protected and authorized)
+router.get("/posts", protect, getMyPosts); // Get posts created by the logged-in admin
+
 router.post(
   "/",
   protect,

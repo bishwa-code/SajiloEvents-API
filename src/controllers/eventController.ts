@@ -3,6 +3,7 @@ import Event, { IEvent } from "../models/Event";
 import User from "../models/User"; // To populate organizer details
 import ErrorHandler from "../utils/errorHandler";
 import { cloudinary } from "../config/cloudinary"; // Import cloudinary instance
+import { Types } from "mongoose";
 
 // @desc    Create a new event
 // @route   POST /api/events
@@ -137,6 +138,31 @@ const getAllEvents = async (
 ) => {
   try {
     const events = await Event.find().populate("organizer", "fullName email");
+
+    res.status(200).json({
+      success: true,
+      count: events.length,
+      events,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+// @desc    Get events created by the logged-in admin
+// @route   GET /api/admin/events
+// @access  Private (Admin only)
+const getMyEvents = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.role !== "admin") {
+    return next(new ErrorHandler("Only admins can access this resource.", 403));
+  }
+
+  try {
+    // Fetch events created by this admin
+    const events = await Event.find({ organizer: req.user._id }).populate(
+      "organizer",
+      "fullName email"
+    );
 
     res.status(200).json({
       success: true,
@@ -341,4 +367,11 @@ const deleteEvent = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createEvent, getAllEvents, getEventById, updateEvent, deleteEvent };
+export {
+  createEvent,
+  getAllEvents,
+  getMyEvents,
+  getEventById,
+  updateEvent,
+  deleteEvent,
+};

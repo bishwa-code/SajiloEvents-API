@@ -96,6 +96,28 @@ const getAllPosts = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+// @desc    Get posts created by the logged-in admin
+// @route   GET /api/admin/posts
+// @access  Private (Admin only)
+const getMyPosts = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user || req.user.role !== "admin") {
+    return next(new ErrorHandler("Only admins can create posts.", 403));
+  }
+  try {
+    const posts = await Post.find({ author: req.user._id })
+      .populate("author", "fullName email")
+      .populate("event", "title eventDate location");
+
+    res.status(200).json({
+      success: true,
+      count: posts.length,
+      posts,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 // @desc    Get single post by ID
 // @route   GET /api/posts/:id
 // @access  Public
@@ -294,4 +316,11 @@ const deletePost = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createPost, getAllPosts, getPostById, updatePost, deletePost };
+export {
+  createPost,
+  getAllPosts,
+  getMyPosts,
+  getPostById,
+  updatePost,
+  deletePost,
+};

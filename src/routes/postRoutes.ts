@@ -14,11 +14,10 @@ const router = express.Router();
 
 // Public routes
 router.get("/", getAllPosts); // Get all posts
+router.get("/my", protect, getMyPosts); // Get posts created by the logged-in admin
 router.get("/:id", getPostById); // Get single post by ID
 
 // Admin-only routes (protected and authorized)
-router.get("/posts", protect, getMyPosts); // Get posts created by the logged-in admin
-
 router.post(
   "/",
   protect,

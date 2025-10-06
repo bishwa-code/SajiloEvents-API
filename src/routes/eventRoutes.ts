@@ -14,10 +14,10 @@ const router = express.Router();
 
 // Public routes
 router.get("/", getAllEvents); // Get all events
+router.get("/my", protect, getMyEvents); // Get events created by the logged-in admin
 router.get("/:id", getEventById); // Get single event by ID
 
 // Admin-only routes (protected and authorized)
-router.get("/events", protect, getMyEvents); // Get events created by the logged-in admin
 router.post(
   "/",
   protect,
